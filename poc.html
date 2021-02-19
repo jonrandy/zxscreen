@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width">
+  <title>ZXBox</title>
+  <style>
+/*    :root {
+      --pixel-size:3px;
+    }
+*/    .scr * {
+      box-sizing:border-box;
+    }
+    .scr {
+      font-size:0;
+      width: 768px; /* calc(var(--pixel-size) * 8*32);*/
+    }
+    .char {
+      width:24px; /*calc(var(--pixel-size) * 8);*/
+      height:24px; /* calc(var(--pixel-size) * 8); */
+      display:inline-block;
+    }
+    .char i {
+      height:3px; /* var(--pixel-size); */
+      width:3px; /* var(--pixel-size); */
+      display:inline-block;
+    }
+    i[o] {
+      border-left: 3px /*var(--pixel-size)*/ solid;
+      width:3px  /*var(--pixel-size) */;
+    }
+    
+    .p0 {
+      background:#000;
+    }
+    .p1 {
+      background:#0000c0;
+    }
+    .p2 {
+      background:#c00000;
+    }
+    .p3 {
+      background:#c000c0;
+    }
+    .p4 {
+      background:#00c000;
+    }
+    .p5 {
+      background:#00c0c0;
+    }
+    .p6 { 
+      background:#c0c000;
+    }
+    .p7 { 
+      background:#c0c0c0;
+    }
+    .b.p1 {
+      background:#0000ff;
+    }
+    .b.p2 {
+      background:#ff0000;
+    }
+    .b.p3 {
+      background:#ff00ff;
+    }
+    .b.p4 {
+      background:#00ff00;
+    }
+    .b.p5 {
+      background:#00ffff;
+    }
+    .b.p6 { 
+      background:#ffff00;
+    }
+    .b.p7 { 
+      background:#ffffff;
+    }
+    
+    .i0 {
+      color:#000;
+    }
+    .i1 {
+      color:#0000c0;
+    }
+    .i2 {
+      color:#c00000;
+    }
+    .i3 {
+      color:#c000c0;
+    }
+    .i4 {
+      color:#00c000;
+    }
+    .i5 {
+      color:#00c0c0;
+    }
+    .i6 { 
+      color:#c0c000;
+    }
+    .i7 { 
+      color:#c0c0c0;
+    }
+    .b.i1 {
+      color:#0000ff;
+    }
+    .b.i2 {
+      color:#ff0000;
+    }
+    .b.i3 {
+      color:#ff00ff;
+    }
+    .b.i4 {
+      color:#00ff00;
+    }
+    .b.i5 {
+      color:#00ffff;
+    }
+    .b.i6 { 
+      color:#ffff00;
+    }
+    .b.i7 { 
+      color:#ffffff;
+    }
+  </style>
+</head>
+<body>
+  <div id="scr" class="scr">
+<!--     <div class="char i0 p3">
+      <b><i o></i><i></i><i o></i><i></i><i o></i><i o></i><i></i><i o></i></b>
+      <b><i></i><i o></i><i></i><i o></i><i></i><i o></i><i o></i><i></i></b>
+      <b><i o></i><i></i><i o></i><i></i><i o></i><i o></i><i></i><i o></i></b>
+      <b><i></i><i o></i><i></i><i o></i><i o></i><i o></i><i o></i><i></i></b>
+      <b><i o></i><i></i><i o></i><i></i><i o></i><i o></i><i></i><i o></i></b>
+      <b><i></i><i o></i><i></i><i o></i><i></i><i o></i><i o></i><i></i></b>
+      <b><i o></i><i></i><i o></i><i></i><i o></i><i o></i><i></i><i o></i></b>
+      <b><i></i><i o></i><i></i><i o></i><i></i><i o></i><i o></i><i></i></b>
+    </div>
+ -->
+  </div>
+  
+  <script>
+    
+    let scr = document.getElementById('scr')
+
+    function drw() {
+      let h = '', p, i
+      for (let k=0; k<32*24; k++) {
+        p = ~~(Math.random()*8)
+        i = ~~(Math.random()*8)
+        b = (Math.random() > .5) ? 'b' : ''
+        h += `<div class="char i${i} p${p} ${b}">`
+        for (let j=0; j<8; j++) {
+          h += '<b><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i>'
+          // //byte = (~~(Math.random()*256)).toString(2)
+          // byte = (85 + (85*(j&1))).toString(2)
+          // byte = byte.padStart(8,0)
+          // byte = byte.replace(/0/g, '<i></i>')
+          // byte = byte.replace(/1/g, '<i o></i>')
+          // h += byte
+          h += '</b>'
+        }
+        h += `</div>`
+      }
+      scr.innerHTML = h
+    }
+
+    drw()
+
+    bytes = [...document.getElementsByTagName('b')]
+
+    function dump() {
+      for( let pp=0; pp<6144; pp++) {
+
+        byte = (~~(Math.random()*256)).toString(2)
+        byte = byte.padStart(8,0)
+        byte = byte.replace(/0/g, '<i></i>')
+        byte = byte.replace(/1/g, '<i o></i>')
+
+        bytes[pp].innerHTML = byte
+
+      }
+    }
+    
+    document.onclick = dump
+
+    dump()
+
+
+
+
+
+  
+  </script>
+</body>
+</html>
