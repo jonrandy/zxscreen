@@ -150,14 +150,7 @@
         b = (Math.random() > .5) ? 'b' : ''
         h += `<div class="char i${i} p${p} ${b}">`
         for (let j=0; j<8; j++) {
-          h += '<b><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i>'
-          // //byte = (~~(Math.random()*256)).toString(2)
-          // byte = (85 + (85*(j&1))).toString(2)
-          // byte = byte.padStart(8,0)
-          // byte = byte.replace(/0/g, '<i></i>')
-          // byte = byte.replace(/1/g, '<i o></i>')
-          // h += byte
-          h += '</b>'
+          h += '<b><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></b>'
         }
         h += `</div>`
       }
@@ -168,6 +161,8 @@
 
     bytes = [...document.getElementsByTagName('b')]
 
+    pp=0
+
     function dump() {
       for( let pp=0; pp<6144; pp++) {
 
@@ -175,9 +170,7 @@
         byte = byte.padStart(8,0)
         byte = byte.replace(/0/g, '<i></i>')
         byte = byte.replace(/1/g, '<i o></i>')
-
-        bytes[pp].innerHTML = byte
-        console.log(byteElOffsetToZXScreenAddr(pp))
+        bytes[zxAddrToByteElOffset(pp+16384)].innerHTML = byte
 
       }
     }
@@ -189,11 +182,19 @@
         charOffset = offset & 7,
         charX = charNum & 31,
         charY = charNum >> 5
-        pixY = (charY << 3) + charOffset,
-        zxY = (pixY&192) + ((pixY&56)>>3) + ((pixY&7)<<3)
+        pixY = (charY << 3) | charOffset,
+        zxY = (pixY&192) | ((pixY&56)>>3) | ((pixY&7)<<3)
 
-        return charX | (zxY<<5)
+        return 16384 | charX | (zxY<<5)
+    }
 
+    function zxAddrToByteElOffset(addr) {
+      let
+        relAddr = addr ^ 16384,
+        [charX, zxY] = [relAddr & 31, relAddr >>5],
+        pixY = (zxY&192) | ((zxY&56)>>3) | ((zxY&7)<<3),
+        charY = pixY >> 3
+        return (charY << 8) | charX<<3 | (pixY & 7)
     }
     
     document.onclick = dump
