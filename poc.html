@@ -177,8 +177,23 @@
         byte = byte.replace(/1/g, '<i o></i>')
 
         bytes[pp].innerHTML = byte
+        console.log(byteElOffsetToZXScreenAddr(pp))
 
       }
+    }
+
+
+    function byteElOffsetToZXScreenAddr(offset) {
+      let
+        charNum = offset >> 3,
+        charOffset = offset & 7,
+        charX = charNum & 31,
+        charY = charNum >> 5
+        pixY = (charY << 3) + charOffset,
+        zxY = (pixY&192) + ((pixY&56)>>3) + ((pixY&7)<<3)
+
+        return charX | (zxY<<5)
+
     }
     
     document.onclick = dump
