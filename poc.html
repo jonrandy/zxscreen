@@ -199,6 +199,31 @@
     
     document.onclick = dump
 
+    function load() {
+      let byte
+      let oReq = new XMLHttpRequest();
+      oReq.open("GET", "/test.scr", true);
+      oReq.responseType = "arraybuffer";
+
+      oReq.onload = function (oEvent) {
+        let arrayBuffer = oReq.response; // Note: not oReq.responseText
+        if (arrayBuffer) {
+          let byteArray = new Uint8Array(arrayBuffer);
+          for (var i = 0; i < byteArray.byteLength; i++) {
+            byte = byteArray[i].toString(2)
+            byte = byte.padStart(8,0)
+            byte = byte.replace(/0/g, '<i></i>')
+            byte = byte.replace(/1/g, '<i o></i>')
+            bytes[zxAddrToByteElOffset(i+16384)].innerHTML = byte
+          }
+        }
+      };
+
+      oReq.send(null);
+
+    }
+
+
     dump()
 
 
