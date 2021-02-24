@@ -5,29 +5,29 @@
   <meta name="viewport" content="width=device-width">
   <title>ZXBox</title>
   <style>
-/*    :root {
-      --pixel-size:3px;
+    :root {
+      --pixel-size:2px;
     }
-*/    .scr * {
+    .scr * {
       box-sizing:border-box;
     }
     .scr {
       font-size:0;
-      width: 768px; /* calc(var(--pixel-size) * 8*32);*/
+      width: calc(var(--pixel-size) * 8*32);
     }
     .char {
-      width:24px; /*calc(var(--pixel-size) * 8);*/
-      height:24px; /* calc(var(--pixel-size) * 8); */
+      width:calc(var(--pixel-size) * 8);
+      height: calc(var(--pixel-size) * 8); 
       display:inline-block;
     }
     .char i {
-      height:3px; /* var(--pixel-size); */
-      width:3px; /* var(--pixel-size); */
+      height: var(--pixel-size); 
+      width: var(--pixel-size); 
       display:inline-block;
     }
     i[o] {
-      border-left: 3px /*var(--pixel-size)*/ solid;
-      width:3px  /*var(--pixel-size) */;
+      border-left:  var(--pixel-size) solid;
+      width:  var(--pixel-size) ;
     }
     
     .p0 {
@@ -160,6 +160,7 @@
     drw()
 
     bytes = [...document.getElementsByTagName('b')]
+    chars = [...document.getElementsByClassName('char')]
 
     pp=0
 
@@ -196,11 +197,20 @@
         charY = pixY >> 3
         return (charY << 8) | charX<<3 | (pixY & 7)
     }
+
+    function attrToIPBF(attr) {
+      return [
+        attr & 7,
+        attr >> 3 & 7,
+        attr & 64,
+        attr & 128
+      ]
+    }
     
     document.onclick = dump
 
     function load() {
-      let byte
+      let byte, ci, cp, cb, cf
       let oReq = new XMLHttpRequest();
       oReq.open("GET", "/test.scr", true);
       oReq.responseType = "arraybuffer";
@@ -210,11 +220,16 @@
         if (arrayBuffer) {
           let byteArray = new Uint8Array(arrayBuffer);
           for (var i = 0; i < byteArray.byteLength; i++) {
-            byte = byteArray[i].toString(2)
-            byte = byte.padStart(8,0)
-            byte = byte.replace(/0/g, '<i></i>')
-            byte = byte.replace(/1/g, '<i o></i>')
-            bytes[zxAddrToByteElOffset(i+16384)].innerHTML = byte
+            if (i<6144) {
+              byte = byteArray[i].toString(2)
+              byte = byte.padStart(8,0)
+              byte = byte.replace(/0/g, '<i></i>')
+              byte = byte.replace(/1/g, '<i o></i>')
+              bytes[zxAddrToByteElOffset(i+16384)].innerHTML = byte
+            } else {
+              [ci, cp, cb, cf] = attrToIPBF(byteArray[i])
+              chars[i-6144].className = `char i${ci} p${cp} ${cb?'b':''} ${cf?'f':''}`
+            }
           }
         }
       };
