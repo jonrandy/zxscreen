@@ -5,13 +5,11 @@
   <meta name="viewport" content="width=device-width">
   <title>ZXBox</title>
   <style>
-    :root {
-      --pixel-size:2px;
-    }
     .scr * {
       box-sizing:border-box;
     }
     .scr {
+      --pixel-size:2px;
       font-size:0;
       width: calc(var(--pixel-size) * 8*32);
     }
@@ -128,7 +126,9 @@
   </div>
   
   <script>
-    
+
+    const byteToHTML = byte => byte.toString(2).padStart(8,0).replace(/0|1/g, m=>['<u></u>','<s></s>'][+m])
+
     let scr = document.getElementById('scr')
 
     function drw() {
@@ -139,7 +139,7 @@
         b = (Math.random() > .5) ? 'b' : ''
         h += `<div class="char i${i} p${p} ${b}">`
         for (let j=0; j<8; j++) {
-          h += '<b><u></u><u></u><u></u><u></u><u></u><u></u><u></u><u></u></b>'
+          h += '<b>' + byteToHTML(0) + '</b>'
         }
         h += `</div>`
       }
@@ -148,34 +148,17 @@
 
     drw()
 
-    bytes = [...document.getElementsByTagName('b')]
-    chars = [...document.getElementsByClassName('char')]
+    let bytes = [...document.getElementsByTagName('b')]
+    let chars = [...document.getElementsByClassName('char')]
 
-    pp=0
+    let byte
 
     function dump() {
       for( let pp=0; pp<6144; pp++) {
-
-        byte = (~~(Math.random()*256)).toString(2)
-        byte = byte.padStart(8,0)
-        byte = byte.replace(/0/g, '<u></u>')
-        byte = byte.replace(/1/g, '<s></s>')
-        bytes[zxAddrToByteElOffset(pp+16384)].innerHTML = byte
+        byte = (~~(Math.random()*256))
+        bytes[zxAddrToByteElOffset(pp+16384)].innerHTML = byteToHTML(byte)
 
       }
-    }
-
-
-    function byteElOffsetToZXScreenAddr(offset) {
-      let
-        charNum = offset >> 3,
-        charOffset = offset & 7,
-        charX = charNum & 31,
-        charY = charNum >> 5
-        pixY = (charY << 3) | charOffset,
-        zxY = (pixY&192) | ((pixY&56)>>3) | ((pixY&7)<<3)
-
-        return 16384 | charX | (zxY<<5)
     }
 
     function zxAddrToByteElOffset(addr) {
@@ -205,16 +188,12 @@
       oReq.responseType = "arraybuffer";
 
       oReq.onload = function (oEvent) {
-        let arrayBuffer = oReq.response; // Note: not oReq.responseText
+        let arrayBuffer = oReq.response;
         if (arrayBuffer) {
           let byteArray = new Uint8Array(arrayBuffer);
           for (var i = 0; i < byteArray.byteLength; i++) {
             if (i<6144) {
-              byte = byteArray[i].toString(2)
-              byte = byte.padStart(8,0)
-              byte = byte.replace(/0/g, '<u></u>')
-              byte = byte.replace(/1/g, '<s></s>')
-              bytes[zxAddrToByteElOffset(i+16384)].innerHTML = byte
+              bytes[zxAddrToByteElOffset(i+16384)].innerHTML = byteToHTML(byteArray[i])
             } else {
               [ci, cp, cb, cf] = attrToIPBF(byteArray[i])
               chars[i-6144].className = `char i${ci} p${cp} ${cb?'b':''} ${cf?'f':''}`
@@ -229,20 +208,6 @@
 
 
     dump()
-
-
-// // Speccy memory addresses for y-coords on screen (first byte) 
-
-// let list = [], third, midblock, fine, i;
-
-// for (i=0;i<192;i++) {
-//   third =  i&192 ;
-//   midblock = (i&56)>>3 ;
-//   fine = (i&7)<<3 ;
-//   list.push(midblock+third+fine)
-// }
-
-// document.body.innerHTML += list.join();
 
 
   
