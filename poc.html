@@ -20,12 +20,12 @@
       height: calc(var(--pixel-size) * 8); 
       display:inline-block;
     }
-    .char i {
+    .char u, .char s {
       height: var(--pixel-size); 
       width: var(--pixel-size); 
       display:inline-block;
     }
-    i[o] {
+    .char s {
       border-left:  var(--pixel-size) solid;
       width:  var(--pixel-size) ;
     }
@@ -125,17 +125,6 @@
 </head>
 <body>
   <div id="scr" class="scr">
-<!--     <div class="char i0 p3">
-      <b><i o></i><i></i><i o></i><i></i><i o></i><i o></i><i></i><i o></i></b>
-      <b><i></i><i o></i><i></i><i o></i><i></i><i o></i><i o></i><i></i></b>
-      <b><i o></i><i></i><i o></i><i></i><i o></i><i o></i><i></i><i o></i></b>
-      <b><i></i><i o></i><i></i><i o></i><i o></i><i o></i><i o></i><i></i></b>
-      <b><i o></i><i></i><i o></i><i></i><i o></i><i o></i><i></i><i o></i></b>
-      <b><i></i><i o></i><i></i><i o></i><i></i><i o></i><i o></i><i></i></b>
-      <b><i o></i><i></i><i o></i><i></i><i o></i><i o></i><i></i><i o></i></b>
-      <b><i></i><i o></i><i></i><i o></i><i></i><i o></i><i o></i><i></i></b>
-    </div>
- -->
   </div>
   
   <script>
@@ -150,7 +139,7 @@
         b = (Math.random() > .5) ? 'b' : ''
         h += `<div class="char i${i} p${p} ${b}">`
         for (let j=0; j<8; j++) {
-          h += '<b><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></b>'
+          h += '<b><u></u><u></u><u></u><u></u><u></u><u></u><u></u><u></u></b>'
         }
         h += `</div>`
       }
@@ -169,8 +158,8 @@
 
         byte = (~~(Math.random()*256)).toString(2)
         byte = byte.padStart(8,0)
-        byte = byte.replace(/0/g, '<i></i>')
-        byte = byte.replace(/1/g, '<i o></i>')
+        byte = byte.replace(/0/g, '<u></u>')
+        byte = byte.replace(/1/g, '<s></s>')
         bytes[zxAddrToByteElOffset(pp+16384)].innerHTML = byte
 
       }
@@ -223,8 +212,8 @@
             if (i<6144) {
               byte = byteArray[i].toString(2)
               byte = byte.padStart(8,0)
-              byte = byte.replace(/0/g, '<i></i>')
-              byte = byte.replace(/1/g, '<i o></i>')
+              byte = byte.replace(/0/g, '<u></u>')
+              byte = byte.replace(/1/g, '<s></s>')
               bytes[zxAddrToByteElOffset(i+16384)].innerHTML = byte
             } else {
               [ci, cp, cb, cf] = attrToIPBF(byteArray[i])
