@@ -164,18 +164,18 @@
     function zxAddrToByteElOffset(addr) {
       let
         relAddr = addr ^ 16384,
-        [charX, zxY] = [relAddr & 31, relAddr >>5],
-        pixY = (zxY&192) | ((zxY&56)>>3) | ((zxY&7)<<3),
+        [charX, zxY] = [relAddr & 31, relAddr >> 5],
+        pixY = ( zxY & 192 ) | ((zxY & 56) >> 3) | ((zxY & 7) << 3),
         charY = pixY >> 3
-        return (charY << 8) | charX<<3 | (pixY & 7)
+        return (charY << 8) | charX << 3 | (pixY & 7)
     }
 
     function attrToIPBF(attr) {
       return [
-        attr & 7,
-        attr >> 3 & 7,
-        attr & 64,
-        attr & 128
+        attr & 7, // ink
+        attr >> 3 & 7, // paper
+        attr & 64, // bright
+        attr & 128 // flash
       ]
     }
     
