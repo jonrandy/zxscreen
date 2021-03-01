@@ -11,4 +11,4 @@ console.log(ZXB.bytetoHTML(170))
 console.log(ZXB.bytetoHTML(85))
 console.log(ZXB.bytetoHTML(255))
 
-console.log(ZXB.colIndexToRGB(15))
+console.log(ZXB.colIndexToRGB(11))
