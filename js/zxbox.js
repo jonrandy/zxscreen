@@ -70,7 +70,6 @@ function insertElements(screen, c = CLASS) {
 
 	scr.className = c.screen
 	scr.style.setProperty(PIXEL_SIZE_VARNAME, screen.pixelSize + 'px')
-	// TODO - sort out weird problem with pixel-size CSS not inheriting
 
 	for (let char=0; char<32*24; char++) {
 		h += `<div class="${c.char} i0 p7 b">`
@@ -88,9 +87,9 @@ function insertElements(screen, c = CLASS) {
 
 function buildCSS(c = CLASS) {
 	let css = `
-		.${c.screen} * { box-sizing: border-box }
+		.${c.screen} * { box-sizing: border-box; }
 		.${c.screen} { font-size: 0; width: calc(var(${PIXEL_SIZE_VARNAME}) * 8 * 32); }
-		.${c.char} { width: calc(var(${PIXEL_SIZE_VARNAME}) * 8); height: calc(var(${PIXEL_SIZE_VARNAME}) * 8); display: inline-block; },
+		.${c.char} { width: calc(var(${PIXEL_SIZE_VARNAME}) * 8); height: calc(var(${PIXEL_SIZE_VARNAME}) * 8); display: inline-block; }
 		.${c.char} ${BIT_ELEMENTS[0]}, .${c.char} ${BIT_ELEMENTS[1]} {
 			height: var(${PIXEL_SIZE_VARNAME});
 			width: var(${PIXEL_SIZE_VARNAME});
