@@ -40,18 +40,23 @@ function screen(container = document.body,	{	pixelSize = 1, initialMemory = new 
 
 	let
 		_mem = new Uint8Array(6912),
-		newScreen = {	container, pixelSize,	_mem }
+		newScreen = {	container, pixelSize,	_mem },
+		[byteEls, charEls] = initialiseScreen(newScreen)
 
-	initialiseScreen(newScreen)
+	newScreen._bytes = byteEls
+	newScreen._chars = charEls
+
 	poke$(0, initialMemory, newScreen)
-	return lastScreen = newScreen
+
+	lastScreen = {...newScreen}
+	return newScreen
 
 }
 
 
 function initialiseScreen(screen) {
 	if (!cssExists()) insertCSS()
-	insertElements(screen)
+	return insertElements(screen)
 }
 
 
@@ -74,14 +79,13 @@ function insertElements(screen, c = CLASS) {
 	for (let char=0; char<32*24; char++) {
 		h += `<div class="${c.char} i0 p7 b">`
 		for (let byte=0; byte<8; byte++) {
-			h += elHTML(BYTE_ELEMENT, byteToHTML(0))
+			h += elHTML(BYTE_ELEMENT)
 		}
 		h += `</div>`
 	}
-
 	scr.innerHTML = h
-
 	screen.container.appendChild(scr)
+	return [ [...scr.getElementsByTagName(BYTE_ELEMENT)], [...scr.getElementsByClassName(CLASS.char)] ]
 }
 
 

@@ -15,7 +15,7 @@ console.log(ZXB.colIndexToRGB(11))
 
 ZXB.insertCSS()
 
-ZXB.screen()
+window.zx = ZXB.screen(document.getElementById('zxs'), {pixelSize:2})
 
 
 
