@@ -85,7 +85,7 @@ function insertElements(screen, c = CLASS) {
 	}
 	scr.innerHTML = h
 	screen.container.appendChild(scr)
-	return [ [...scr.getElementsByTagName(BYTE_ELEMENT)], [...scr.getElementsByClassName(CLASS.char)] ]
+	return [ [...scr.getElementsByTagName(BYTE_ELEMENT)], [...scr.getElementsByClassName(c.char)] ]
 }
 
 
