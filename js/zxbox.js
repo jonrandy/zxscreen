@@ -2,6 +2,10 @@ const
 
 	STYLE_ID = '_zxb_css',
 
+	BYTECOUNT_BITMAP = 6144,
+	BYTECOUNT_ATTRIBUTES = 768,
+	BYTECOUNT_SCREEN = BYTECOUNT_BITMAP + BYTECOUNT_ATTRIBUTES,
+
 	BYTE_ELEMENT = 'b',
 	BIT_ELEMENTS = ['u', 's'],
 
@@ -36,10 +40,10 @@ const
 	colIndexToRGB = i => intToBin(['00', config['bright'+(i&8?1:0)] ], 3)((i&4)>>1 | (i&2)<< 1  | i&1)
 
 
-function screen(container = document.body,	{	pixelSize = 1, initialMemory = new Uint8Array(6912)	} = {}) {
-
+function screen(container = document.body,	{	pixelSize = 1, initialMemory = new Uint8Array(BYTECOUNT_SCREEN)	} = {}) {
+	// TODO - deal with initialMemory
 	let
-		_mem = new Uint8Array(6912),
+		_mem = new Uint8Array(BYTECOUNT_SCREEN),
 		newScreen = {	container, pixelSize,	_mem },
 		[byteEls, charEls] = initialiseScreen(newScreen)
 
@@ -114,11 +118,25 @@ function buildCSS(c = CLASS) {
 }
 
 
-function poke(address, screen = lastScreen) {
+function poke(address, value, screen = lastScreen) {
+	let offset = address - config.baseAddress
+	// TODO - remember to update screen _mem array
+	if (offset < BYTECOUNT_BITMAP) {
+		setBitmapByte(offset, value, screen)
+	} else {
+		setAttributeBlock(offset - BYTECOUNT_BITMAP, value, screen)
+	}
+}
+
+function poke$(address, values, screen = lastScreen) {
 
 }
 
-function poke$(address, screen = lastScreen) {
+function setBitmapByte(offset, value, screen) {
+
+}
+
+function setAttributeBlock(offset, value, screen) {
 
 }
 
@@ -135,5 +153,7 @@ export {
 	byteToHTML,
 	colIndexToRGB,
 	config,
-	insertCSS
+	insertCSS,
+	poke,
+	poke$
 }
