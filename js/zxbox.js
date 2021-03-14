@@ -39,9 +39,16 @@ const
 	byteToHTML = intToBin(BIT_ELEMENTS.map(emptyEl), 8),
 	colIndexToRGB = i => intToBin(['00', config['bright'+(i&8?1:0)] ], 3)((i&4)>>1 | (i&2)<< 1  | i&1)
 
+function attributeToIPBF(attr) {
+    return [
+      attr & 7, // ink
+      attr >> 3 & 7, // paper
+      attr & 64, // bright
+      attr & 128 // flash
+    ]
+}
 
 function screen(container = document.body,	{	pixelSize = 1, initialMemory = new Uint8Array(BYTECOUNT_SCREEN)	} = {}) {
-	// TODO - deal with initialMemory
 	let
 		_mem = new Uint8Array(BYTECOUNT_SCREEN),
 		newScreen = {	container, pixelSize,	_mem },
@@ -119,8 +126,9 @@ function buildCSS(c = CLASS) {
 
 
 function poke(address, value, screen = lastScreen) {
+	// TODO - properly convert from speccy mem offset to our byte el offset
 	let offset = address - config.baseAddress
-	// TODO - remember to update screen _mem array
+	screen._mem[offset] = value
 	if (offset < BYTECOUNT_BITMAP) {
 		setBitmapByte(offset, value, screen)
 	} else {
@@ -133,11 +141,12 @@ function poke$(address, values, screen = lastScreen) {
 }
 
 function setBitmapByte(offset, value, screen) {
-
+	screen._bytes[offset].innerHTML = byteToHTML(value)
 }
 
-function setAttributeBlock(offset, value, screen) {
-
+function setAttributeBlock(offset, value, screen, c = CLASS) {
+	let [ink, paper, bright, flash] = attributeToIPBF(value)
+	screen._chars[offset].className = `${c.char} ${c.ink+ink} ${c.paper+paper} ${bright ? c.bright : ''} ${flash ? c.flash : ''} `
 }
 
 

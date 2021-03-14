@@ -50,10 +50,11 @@
     let byte
 
     function dump() {
-      for( let pp=0; pp<6144; pp++) {
+      for( let pp=0; pp<6912; pp++) {
         byte = (~~(Math.random()*256))
-        bytes[zxAddrToByteElOffset(pp+16384)].innerHTML = byteToHTML(byte)
-        zx._bytes[zxAddrToByteElOffset(pp+16384)].innerHTML = byteToHTML(byte)
+        //bytes[zxAddrToByteElOffset(pp+16384)].innerHTML = byteToHTML(byte)
+        //zx._bytes[zxAddrToByteElOffset(pp+16384)].innerHTML = byteToHTML(byte)
+        zx.poke(16384+pp, byte)
       }
     }
 
