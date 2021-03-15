@@ -66,9 +66,10 @@ function screen(container = document.body,	{	pixelSize = 1, initialMemory = new 
 	newScreen._bytes = byteEls
 	newScreen._chars = charEls
 
-	poke$(0, initialMemory, newScreen)
-
 	lastScreen = {...newScreen}
+
+	poke$(config.baseAddress, initialMemory, newScreen)
+
 	return newScreen
 
 }
@@ -146,7 +147,10 @@ function poke(address, value, screen = lastScreen) {
 }
 
 function poke$(address, values, screen = lastScreen) {
-
+	console.log(screen)
+	for (let i=0; i < values.length; i++) {
+		poke(address+i, values[i], screen)
+	}
 }
 
 function setBitmapByte(offset, value, screen) {
