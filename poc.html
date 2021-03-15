@@ -15,7 +15,6 @@
 
 
     function dump() {
-      // 6144, 6912, 3072
       for( let pp=0; pp<6912; pp++) {
         zx.poke(16384+pp, (~~(Math.random()*256)))
       }
@@ -33,23 +32,13 @@
         let arrayBuffer = oReq.response;
         if (arrayBuffer) {
           let byteArray = new Uint8Array(arrayBuffer);
-          for (var i = 0; i < byteArray.byteLength; i++) {
-            if (i<6144) {
-              bytes[zxAddrToByteElOffset(i+16384)].innerHTML = byteToHTML(byteArray[i])
-            } else {
-              [ci, cp, cb, cf] = attrToIPBF(byteArray[i])
-              chars[i-6144].className = `char i${ci} p${cp} ${cb?'b':''} ${cf?'f':''}`
-            }
-          }
+          zx.poke$(16384, byteArray);
         }
       };
 
       oReq.send(null);
 
     }
-
-
-
 
   
   </script>

@@ -136,7 +136,6 @@ function buildCSS(c = CLASS) {
 
 
 function poke(address, value, screen = lastScreen) {
-	// TODO - properly convert from speccy mem offset to our byte el offset
 	let offset = address - config.baseAddress
 	screen._mem[offset] = value
 	if (offset < BYTECOUNT_BITMAP) {
@@ -147,7 +146,6 @@ function poke(address, value, screen = lastScreen) {
 }
 
 function poke$(address, values, screen = lastScreen) {
-	console.log(screen)
 	for (let i=0; i < values.length; i++) {
 		poke(address+i, values[i], screen)
 	}
