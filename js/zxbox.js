@@ -115,13 +115,13 @@ function buildCSS(c = CLASS) {
 	let pCSS = '', iCSS = '', col
 	for (let a=0; a<=15; a++) {
 		col = '#' + colIndexToRGB(a)
-		pCSS += `.${(a&8 ? 'b.': '')+c.paper+(a&7)} { background: ${col}; }`
-		iCSS += `.${(a&8 ? 'b.': '')+c.ink+(a&7)} { color: ${col}; }`
+		pCSS += `.${(a&8 ? c.bright+'.': '')+c.paper+(a&7)} { background: ${col}; }`
+		iCSS += `.${(a&8 ? c.bright+'.': '')+c.ink+(a&7)} { color: ${col}; }`
 	}
 
 	// TODO - add FLASH css
 
-	return css+pCSS+iCSS
+	return css + pCSS + iCSS
 }
 
 
