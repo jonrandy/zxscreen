@@ -48,6 +48,15 @@ function attributeToIPBF(attr) {
     ]
 }
 
+function zxAddrToByteElOffset(addr) {
+  let
+    relAddr = addr ^ 16384,
+    [charX, zxY] = [relAddr & 31, relAddr >> 5],
+    pixY = ( zxY & 192 ) | ((zxY & 56) >> 3) | ((zxY & 7) << 3),
+    charY = pixY >> 3
+  return (charY << 8) | charX << 3 | (pixY & 7)
+}
+
 function screen(container = document.body,	{	pixelSize = 1, initialMemory = new Uint8Array(BYTECOUNT_SCREEN)	} = {}) {
 	let
 		_mem = new Uint8Array(BYTECOUNT_SCREEN),
@@ -130,7 +139,7 @@ function poke(address, value, screen = lastScreen) {
 	let offset = address - config.baseAddress
 	screen._mem[offset] = value
 	if (offset < BYTECOUNT_BITMAP) {
-		setBitmapByte(offset, value, screen)
+		setBitmapByte(zxAddrToByteElOffset(offset), value, screen)
 	} else {
 		setAttributeBlock(offset - BYTECOUNT_BITMAP, value, screen)
 	}

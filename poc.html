@@ -12,68 +12,18 @@
   </style>
 </head>
 <body>
-  <div id="scr" class="zxb_scr">
-  </div>
   <div id="zxs"></div>
 
   <script src="index.js" type="module"></script>
   
   <script>
 
-    // Color index to RGB
-    // f = i=>((i & 4) >> 1 | (i & 2) << 1  | i & 1).toString(2).padStart(3,0).replace(/0|1/g, m=>['00','ff'][+m])
-
-    const byteToHTML = byte => byte.toString(2).padStart(8,0).replace(/0|1/g, m=>['<u></u>','<s></s>'][+m])
-
-    let scr = document.querySelector('.zxb_scr')
-
-    function drw() {
-      let h = '', p, i
-      for (let k=0; k<32*24; k++) {
-        p = ~~(Math.random()*8)
-        i = ~~(Math.random()*8)
-        b = (Math.random() > .5) ? 'b' : ''
-        h += `<div class="c i${i} p${p} ${b}">`
-        for (let j=0; j<8; j++) {
-          h += '<b>' + byteToHTML(0) + '</b>'
-        }
-        h += `</div>`
-      }
-      scr.innerHTML = h
-    }
-
-    drw()
-
-    let bytes = [...document.getElementsByTagName('b')]
-    let chars = [...document.getElementsByClassName('c')]
-
-    let byte
 
     function dump() {
+      // 6144, 6912, 3072
       for( let pp=0; pp<6912; pp++) {
-        byte = (~~(Math.random()*256))
-        //bytes[zxAddrToByteElOffset(pp+16384)].innerHTML = byteToHTML(byte)
-        //zx._bytes[zxAddrToByteElOffset(pp+16384)].innerHTML = byteToHTML(byte)
-        zx.poke(16384+pp, byte)
+        zx.poke(16384+pp, (~~(Math.random()*256)))
       }
-    }
-
-    function zxAddrToByteElOffset(addr) {
-      let
-        relAddr = addr ^ 16384,
-        [charX, zxY] = [relAddr & 31, relAddr >> 5],
-        pixY = ( zxY & 192 ) | ((zxY & 56) >> 3) | ((zxY & 7) << 3),
-        charY = pixY >> 3
-        return (charY << 8) | charX << 3 | (pixY & 7)
-    }
-
-    function attrToIPBF(attr) {
-      return [
-        attr & 7, // ink
-        attr >> 3 & 7, // paper
-        attr & 64, // bright
-        attr & 128 // flash
-      ]
     }
     
     document.onclick = dump
@@ -104,7 +54,6 @@
     }
 
 
-    dump()
 
 
   
