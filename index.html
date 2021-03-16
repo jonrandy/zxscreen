@@ -1,13 +1,46 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
+
 <head>
-	<meta charset="UTF-8">
-	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<title>ZXBox - ZX Spectrum Screen Simulator</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width">
+  <title>ZXBox - ZX Spectrum Screen Simulator</title>
 </head>
 <body>
+  <div id="zxs"></div>
 
-	<script type="module" src="index.js"></script>
-	
+  <script src="index.js" type="module"></script>
+
+  <script>
+
+
+    function dump() {
+      for( let pp=0; pp<6912; pp++) {
+        zx.poke(16384+pp, (~~(Math.random()*256)))
+      }
+    }
+
+    document.onclick = dump
+
+    function load(fname = 'test1') {
+      let byte, ci, cp, cb, cf
+      let oReq = new XMLHttpRequest();
+      oReq.open("GET", `/${fname}.scr`, true);
+      oReq.responseType = "arraybuffer";
+
+      oReq.onload = function (oEvent) {
+        let arrayBuffer = oReq.response;
+        if (arrayBuffer) {
+          let byteArray = new Uint8Array(arrayBuffer);
+          zx.poke$(16384, byteArray);
+        }
+      };
+
+      oReq.send(null);
+
+    }
+
+
+  </script>
 </body>
 </html>
