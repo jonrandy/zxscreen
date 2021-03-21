@@ -1,2 +1,2 @@
-# ZXbox
+# ZX Screen
 

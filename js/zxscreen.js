@@ -37,7 +37,7 @@ const
 	elHTML = (type, content='') => `<${type}>${content}</${type}>`,
 	emptyEl = type => elHTML(type),
 	byteToHTML = intToBin(BIT_ELEMENTS.map(emptyEl), 8),
-	colIndexToRGB = i => intToBin(['00', config['bright'+(i&8?1:0)] ], 3)((i&4)>>1 | (i&2)<< 1  | i&1)
+	colIndexToRGB = i => intToBin(['00', config['bright'+(i&8?1:0)] ], 3)((i&4)>>1 | (i&2)<<1  | i&1)
 
 function attributeToIPBF(attr) {
     return [
