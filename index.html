@@ -33,12 +33,34 @@
         if (arrayBuffer) {
           let byteArray = new Uint8Array(arrayBuffer);
           zx.poke$(16384, byteArray);
+
+          console.log(JSON.stringify(RLECompress(byteArray)))
+
         }
-      };
+      }
 
       oReq.send(null);
 
     }
+
+    function RLECompress(arr) {
+      let vals = [], lengths = []
+      arr.forEach((v,i)=>{
+        if (i) {
+          if (v==vals[vals.length-1]) {
+            lengths[lengths.length-1]++
+          } else {
+            vals.push(v)
+            lengths.push(1)
+          }
+        } else {
+          vals.push(v)
+          lengths[0] = 1
+        }
+      })
+      return [vals, lengths]
+    }
+
 
 
   </script>

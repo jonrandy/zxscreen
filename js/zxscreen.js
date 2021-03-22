@@ -1,5 +1,12 @@
 const
 
+	_LOGO_COMPRESSED = [
+		[0,1,0,7,81,155,59,168,3,0,7,255,0,1,82,34,162,56,7,0,2,33,35,51,56,15,0,4,80,162,56,31,0,7,83,26,187,168,63,0,127,0,255,0,71,0,71,66,86,116,101,71,0,65,1],
+		[4315,4,247,1,1,1,1,1,4,23,1,8,215,1,1,1,1,1,4,247,1,1,1,1,1,4,247,1,1,2,1,4,247,1,1,1,1,1,4,252,4,252,4,727,10,22,5,1,1,1,1,1,22,9,1]
+	],
+
+	_LOGO_SCREEN = (([v,l])=>{ let a=[]; v.forEach((x,i)=>{for(let n=0;n<l[i];n++) a.push(x);}); return Uint8Array.from(a);})(_LOGO_COMPRESSED),
+
 	STYLE_ID = '_zxb_css',
 
 	BYTECOUNT_BITMAP = 6144,
@@ -57,7 +64,7 @@ function zxAddrToByteElOffset(addr) {
   return (charY << 8) | charX << 3 | (pixY & 7)
 }
 
-function screen(container = document.body,	{	pixelSize = 1, initialMemory = new Uint8Array(BYTECOUNT_SCREEN)	} = {}) {
+function screen(container = document.body,	{	pixelSize = 1, initialMemory = _LOGO_SCREEN	} = {}) {
 	let
 		_mem = new Uint8Array(BYTECOUNT_SCREEN),
 		newScreen = {	container, pixelSize,	_mem },
