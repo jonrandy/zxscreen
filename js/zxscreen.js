@@ -128,6 +128,18 @@ function buildCSS(c = CLASS) {
 			display: inline-block;
 		}
 		.${c.char} ${BIT_ELEMENTS[1]} { border-left: var(${PIXEL_SIZE_VARNAME}) solid; }
+
+		@keyframes flash0 {
+		  0%   {border-left:none;}
+		  50%  {border-left:var(${PIXEL_SIZE_VARNAME}) solid;}
+		}
+		@keyframes flash1 {
+		  0%   {border-left:var(${PIXEL_SIZE_VARNAME}) solid;}
+		  50%  {border-left:none;}
+		}
+
+		.${c.char}.${c.flash} ${BIT_ELEMENTS[0]} { animation: flash0 0.64s step-end infinite; }
+		.${c.char}.${c.flash} ${BIT_ELEMENTS[1]} { animation: flash1 0.64s step-end infinite; }
 	`
 	let pCSS = '', iCSS = '', col
 	for (let a=0; a<=15; a++) {

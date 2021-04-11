@@ -9,15 +9,17 @@
 <body>
   <div id="zxs"></div>
 
-  <script src="index.js" type="module"></script>
 
-  <script>
+  <script type="module"> 
+
+    import * as ZXS from './js/zxscreen.js'
+
+    ZXB.screen(document.getElementById('zxs'), {pixelSize:2})
+    window.zx = ZXS
 
 
     function dump() {
-      for( let pp=0; pp<6912; pp++) {
-        zx.poke(16384+pp, (~~(Math.random()*256)))
-      }
+      zx.poke$(16384, Uint8Array.from({length: 6912}, ()=>~~(Math.random() * 255)))
     }
 
     document.onclick = dump
@@ -33,36 +35,13 @@
         if (arrayBuffer) {
           let byteArray = new Uint8Array(arrayBuffer);
           zx.poke$(16384, byteArray);
-
-          console.log(JSON.stringify(RLECompress(byteArray)))
-
         }
       }
 
       oReq.send(null);
 
     }
-
-    function RLECompress(arr) {
-      let vals = [], lengths = []
-      arr.forEach((v,i)=>{
-        if (i) {
-          if (v==vals[vals.length-1]) {
-            lengths[lengths.length-1]++
-          } else {
-            vals.push(v)
-            lengths.push(1)
-          }
-        } else {
-          vals.push(v)
-          lengths[0] = 1
-        }
-      })
-      return [vals, lengths]
-    }
-
-
-
+    window.load = load
   </script>
 </body>
 </html>
