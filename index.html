@@ -9,37 +9,28 @@
 <body>
   <div id="zxs"></div>
 
-
   <script type="module"> 
-
-    import * as ZXS from './js/zxscreen.js'
-
-    ZXS.screen(document.getElementById('zxs'), {pixelSize:2})
-    window.zx = ZXS
-
+    import * as zx from './js/zxscreen.js'
+    zx.screen(document.getElementById('zxs'), {pixelSize:2})
 
     function dump() {
-      zx.poke$(16384, Uint8Array.from({length: 6912}, ()=>~~(Math.random() * 255)))
+      zx.poke$(16384, Uint8Array.from({length: 6912}, ()=>~~(Math.random()*255)))
     }
 
     document.onclick = dump
 
     function load(fname = 'test1') {
-      let byte, ci, cp, cb, cf
-      let oReq = new XMLHttpRequest();
-      oReq.open("GET", `/${fname}.scr`, true);
-      oReq.responseType = "arraybuffer";
-
-      oReq.onload = function (oEvent) {
-        let arrayBuffer = oReq.response;
+      let oReq = new XMLHttpRequest()
+      oReq.open("GET", `/${fname}.scr`, true)
+      oReq.responseType = "arraybuffer"
+      oReq.onload = function () {
+        let arrayBuffer = oReq.response
         if (arrayBuffer) {
-          let byteArray = new Uint8Array(arrayBuffer);
-          zx.poke$(16384, byteArray);
+          let byteArray = new Uint8Array(arrayBuffer)
+          zx.poke$(16384, byteArray)
         }
       }
-
-      oReq.send(null);
-
+      oReq.send(null)
     }
     window.load = load
   </script>

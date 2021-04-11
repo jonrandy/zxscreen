@@ -147,9 +147,6 @@ function buildCSS(c = CLASS) {
 		pCSS += `.${(a&8 ? c.bright+'.': '')+c.paper+(a&7)} { background: ${col}; }`
 		iCSS += `.${(a&8 ? c.bright+'.': '')+c.ink+(a&7)} { color: ${col}; }`
 	}
-
-	// TODO - add FLASH css
-
 	return css + pCSS + iCSS
 }
 
