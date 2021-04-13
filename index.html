@@ -5,23 +5,51 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width">
   <title>ZXScreen - ZX Spectrum Screen Simulator</title>
+  <style>
+    body { font-size: 16px; color: #eee; margin: 25px 0; text-align: center; background: darkslategray; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol"; }
+    #zxs, form { display: inline-block; width:512px; }
+    #zxs { height: 384px; }
+    form { text-align: left; margin: 0 10px;}
+    input[type=button] { padding: 0 15px; }
+    input[type=text] { width:250px; }
+    a,a:visited { color:#fff; text-decoration:underline; }
+  </style>
 </head>
 <body>
-  <div id="zxs"></div>
+  <h1>ZX Screen</h1>
+  <div id="zxs"></div><br>
+  <form>
+    <p>To view a Spectrum screen in HTML/CSS, drag and drop an SCR file, enter a URL to load, upload one, or load a sample image:</p>
+    <p><input type="text" placeholder="URL" disabled> <input type="button" value="Load from URL" disabled> <input id="loadSample" type="button" value="Load a sample"></p>
+    <p><input id="random" type="button" value="Random data"> <input type="file" disabled></p>
+    <p>For more information, visit <a href="https://gitlab.com/jonrandy/zxscreen">https://gitlab.com/jonrandy/zxscreen</a></p>
+  </form>
 
   <script type="module"> 
     import * as zx from './js/zxscreen.js'
     zx.screen(document.getElementById('zxs'), {pixelSize:2})
 
+    let sampleNum = 0
+
+    document.getElementById('loadSample').addEventListener('click', e=>{
+      e.preventDefault()
+      console.log('hello')
+      load(`test${sampleNum+1}.scr`)
+      sampleNum = (sampleNum + 1) % 6
+    })
+
+    document.getElementById('random').addEventListener('click', dump)
+
     function dump() {
       zx.poke$(16384, Uint8Array.from({length: 6912}, ()=>~~(Math.random()*255)))
     }
 
-    document.onclick = dump
+    // document.onclick = dump
 
-    function load(fname = 'test1') {
+
+    function load(url) {
       let oReq = new XMLHttpRequest()
-      oReq.open("GET", `${fname}.scr`, true)
+      oReq.open("GET", `${url}`, true)
       oReq.responseType = "arraybuffer"
       oReq.onload = function () {
         let arrayBuffer = oReq.response
