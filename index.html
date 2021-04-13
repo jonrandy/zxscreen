@@ -21,7 +21,7 @@
 
     function load(fname = 'test1') {
       let oReq = new XMLHttpRequest()
-      oReq.open("GET", `/${fname}.scr`, true)
+      oReq.open("GET", `${fname}.scr`, true)
       oReq.responseType = "arraybuffer"
       oReq.onload = function () {
         let arrayBuffer = oReq.response
