@@ -17,16 +17,15 @@
 </head>
 <body>
   <h1>ZX Screen</h1>
-  <div id="zxs"></div><br>
   <form>
-    <p>To view a Spectrum screen in HTML/CSS, drag and drop an SCR file, enter a URL to load, upload one, or load a sample image:</p>
+  <div id="zxs"></div><br>
+    <p>To view a Spectrum screen in HTML/CSS, drag and drop an SCR file, enter a URL to load, or load a sample image:</p>
     <p><input type="text" placeholder="URL" id="scr_url"> <input id="loadURL" type="button" value="Load from URL"> <input id="loadSample" type="button" value="Load a sample"></p>
-    <p><input id="random" type="button" value="Random data"> <input type="file" disabled></p>
+    <p><input id="random" type="button" value="Random data"></p>
     <p>For more information, visit <a href="https://gitlab.com/jonrandy/zxscreen">https://gitlab.com/jonrandy/zxscreen</a></p>
   </form>
 
   <script type="module"> 
-    //import * as zx from 'https://cdn.skypack.dev/zxscreen?min'
     import * as zx from './zxscreen.js'
     zx.screen(document.getElementById('zxs'), {pixelSize:2})
 
@@ -35,7 +34,7 @@
     document.getElementById('loadSample').addEventListener('click', e=>{
       e.preventDefault()
       load(`test${sampleNum+1}.scr`)
-      sampleNum = (sampleNum + 1) % 6
+      sampleNum = (sampleNum + 1) % 7
     })
 
     document.getElementById('loadURL').addEventListener('click', e=>{
@@ -44,6 +43,28 @@
     })
 
     document.getElementById('random').addEventListener('click', dump)
+
+    window.addEventListener('drop', function(e) {
+      e.preventDefault()
+    })
+    window.addEventListener('dragover', function(e) {
+      e.preventDefault()
+    })
+
+    document.addEventListener('drop', function(e) {
+      e.preventDefault()
+      let fname
+      if (fname=e.dataTransfer.getData("text/plain")) {
+        load(fname)
+      } else if (e.dataTransfer.items.length == 1 && e.dataTransfer.items[0].kind === 'file') {
+        let file = e.dataTransfer.items[0].getAsFile()
+        const reader = new FileReader();
+        reader.onload = e=>{
+          zx.poke$(16384, new Uint8Array(e.target.result))
+        }
+        reader.readAsArrayBuffer(file);
+      }
+    })
 
     function dump() {
       zx.poke$(16384, Uint8Array.from({length: 6912}, ()=>~~(Math.random()*255)))
