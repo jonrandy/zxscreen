@@ -20,12 +20,13 @@
   <div id="zxs"></div><br>
   <form>
     <p>To view a Spectrum screen in HTML/CSS, drag and drop an SCR file, enter a URL to load, upload one, or load a sample image:</p>
-    <p><input type="text" placeholder="URL" disabled> <input type="button" value="Load from URL" disabled> <input id="loadSample" type="button" value="Load a sample"></p>
+    <p><input type="text" placeholder="URL" id="scr_url"> <input id="loadURL" type="button" value="Load from URL"> <input id="loadSample" type="button" value="Load a sample"></p>
     <p><input id="random" type="button" value="Random data"> <input type="file" disabled></p>
     <p>For more information, visit <a href="https://gitlab.com/jonrandy/zxscreen">https://gitlab.com/jonrandy/zxscreen</a></p>
   </form>
 
   <script type="module"> 
+    //import * as zx from 'https://cdn.skypack.dev/zxscreen?min'
     import * as zx from './zxscreen.js'
     zx.screen(document.getElementById('zxs'), {pixelSize:2})
 
@@ -33,9 +34,13 @@
 
     document.getElementById('loadSample').addEventListener('click', e=>{
       e.preventDefault()
-      console.log('hello')
       load(`test${sampleNum+1}.scr`)
       sampleNum = (sampleNum + 1) % 6
+    })
+
+    document.getElementById('loadURL').addEventListener('click', e=>{
+      e.preventDefault()
+      load(window.scr_url.value)
     })
 
     document.getElementById('random').addEventListener('click', dump)
@@ -43,9 +48,6 @@
     function dump() {
       zx.poke$(16384, Uint8Array.from({length: 6912}, ()=>~~(Math.random()*255)))
     }
-
-    // document.onclick = dump
-
 
     function load(url) {
       let oReq = new XMLHttpRequest()

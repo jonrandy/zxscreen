@@ -1,0 +1,30 @@
+{
+  "name": "zxscreen",
+  "version": "1.0.0",
+  "description": "ZX Spectrum Screen Simulator",
+  "main": "zxscreen.js",
+  "type": "module",
+  "module": "zxscreen.js",
+  "sideEffects": false,
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+ssh://git@gitlab.com/jonrandy/zxscreen.git"
+  },
+  "keywords": [
+    "zx",
+    "spectrum",
+    "sinclair",
+    "speccy",
+    "screen",
+    "memory"
+  ],
+  "author": "Jon Randy",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://gitlab.com/jonrandy/zxscreen/issues"
+  },
+  "homepage": "https://gitlab.com/jonrandy/zxscreen#readme"
+}

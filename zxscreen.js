@@ -55,6 +55,18 @@ function attributeToIPBF(attr) {
     ]
 }
 
+function ipbfToAttribute([ink, paper, bright=0, flash=0]) {
+	return (ink & 7) | ((paper & 7 ) << 3) | (~~bright && 64) | (~~flash && 128)
+}
+
+function blankScreenMemory(attr=56, fill=0) {
+	return Uint8Array.from([...Uint8Array.from({length: BYTECOUNT_BITMAP}, ()=>fill), ...Uint8Array.from({length: BYTECOUNT_ATTRIBUTES}, ()=>attr)])
+}
+
+function yposMemoryOffset(y) {
+	return config.baseAddress + (((y&192) | (y&56) >> 3 | (y&7) << 3) << 5)
+}
+
 function zxAddrToByteElOffset(addr) {
   let
     relAddr = addr ^ 16384,
@@ -182,14 +194,13 @@ setConfig({})
 
 
 export {
-	cssExists,
 	setConfig,
 	screen,
-	buildCSS,
-	byteToHTML,
 	colIndexToRGB,
 	config,
-	insertCSS,
 	poke,
-	poke$
+	poke$,
+	yposMemoryOffset,
+	ipbfToAttribute,
+	blankScreenMemory
 }
