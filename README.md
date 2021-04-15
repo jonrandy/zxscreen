@@ -28,8 +28,10 @@ zxs.screen(document.getElementById('zxs'), { pixelSize:2 })
 
 All writing to the screen is done directly by writing bytes to the screen memory - ZXScreen provides no graphics routines for drawing text, lines, etc. These are left as an exercise for the reader 😁
 ```js
-zxs.poke(address, value) // writes a single byte to the screen memory
-zxs.poke$(address, values) // writes multiple bytes to the screen memory (values should be an array/iterable containing byte data)
+// write a single byte to the screen memory
+zxs.poke(address, value)
+// write multiple bytes to the screen memory (values should be an array/iterable containing byte data)
+zxs.poke$(address, values) 
 ```
 Both of the memory writing functions take an optional third parameter which is a `Screen` object returned by the `screen` function. If omitted, the mostly recently created Screen will be written to.
 
