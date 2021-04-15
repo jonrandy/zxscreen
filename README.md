@@ -42,4 +42,4 @@ Both of the memory writing functions take an optional third parameter which is a
 * `yposMemoryOffset` - Takes a y coordinate (0 being top row) and returns the memory offset for the start of that row in the bitmap
 * `colIndexToRGB` - Should you need it, this function returns the RGB value of the given colour index (0-15)
 * `setConfig` - Probably not very useful, but allows you to change the configuration of ZX Screen (RGB values for bright/non-bright, memory base address)
-* `config` - Object containing the current config
+* `config` - Not a function, but an object containing the current config
