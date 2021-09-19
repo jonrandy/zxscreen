@@ -11,7 +11,7 @@
     #zxs { height: 384px; }
     form { text-align: left; margin: 0 10px;}
     input[type=button] { padding: 0 15px; }
-    input[type=text] { width:250px; }
+    input[type=text] { width:230px; }
     a,a:visited { color:#fff; text-decoration:underline; }
   </style>
 </head>
@@ -20,7 +20,7 @@
   <form>
   <div id="zxs"></div><br>
     <p>To view a Spectrum screen in HTML/CSS, drag and drop an SCR file, enter a URL to load, or load a sample image:</p>
-    <p><input type="text" placeholder="URL" id="scr_url"> <input id="loadURL" type="button" value="Load from URL"> <input id="loadSample" type="button" value="Load a sample"></p>
+    <p><input type="text" placeholder="URL" id="scr_url"> <input id="loadURL" type="button" value="Load from URL"> <input id="loadSample" type="button" value="Load sample 1/8"></p>
     <p><input id="random" type="button" value="Random data"></p>
     <p>For more information, visit <a href="https://gitlab.com/jonrandy/zxscreen">https://gitlab.com/jonrandy/zxscreen</a></p>
   </form>
@@ -35,6 +35,7 @@
       e.preventDefault()
       load(`test${sampleNum+1}.scr`)
       sampleNum = (sampleNum + 1) % 8
+      document.getElementById('loadSample').value = `Load sample ${sampleNum+1}/8`
     })
 
     document.getElementById('loadURL').addEventListener('click', e=>{
