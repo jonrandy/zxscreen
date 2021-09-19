@@ -1,6 +1,6 @@
 {
   "name": "zxscreen",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "ZX Spectrum Screen Simulator",
   "main": "zxscreen.js",
   "type": "module",
