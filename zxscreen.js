@@ -7,19 +7,19 @@ const
 
 	_LOGO_SCREEN = (([v,l])=>{ let a=[]; v.forEach((x,i)=>{for(let n=0;n<l[i];n++) a.push(x);}); return Uint8Array.from(a);})(_LOGO_COMPRESSED),
 
-	STYLE_ID = '_zxb_css',
+	STYLE_ID = '__zxs_css',
 
 	BYTECOUNT_BITMAP = 6144,
 	BYTECOUNT_ATTRIBUTES = 768,
 	BYTECOUNT_SCREEN = BYTECOUNT_BITMAP + BYTECOUNT_ATTRIBUTES,
 
 	BYTE_ELEMENT = 'b',
-	BIT_ELEMENTS = ['u', 's'],
+	BIT_TAGS = ['u', 's'],
 
 	PIXEL_SIZE_VARNAME = '--pixel-size',
 
 	CLASS = {
-		screen: 'zxb_scr',
+		screen: 'zxs_scr',
 		char: 'c',
 		paper: 'p',
 		ink: 'i',
@@ -31,7 +31,9 @@ const
 		bright0: 'C0',
 		bright1: 'FF',
 		baseAddress: 16384
-	}
+	},
+
+	BYTE_MEMO = {}
 
 let
 	config,
@@ -43,8 +45,10 @@ const
 	intToBin = (digits, length) => num => num.toString(2).padStart(length, 0).replace(/0|1/g, m=>digits[+m]),
 	elHTML = (type, content='') => `<${type}>${content}</${type}>`,
 	emptyEl = type => elHTML(type),
-	byteToHTML = intToBin(BIT_ELEMENTS.map(emptyEl), 8),
-	colIndexToRGB = i => intToBin(['00', config['bright'+(i&8?1:0)] ], 3)((i&4)>>1 | (i&2)<<1  | i&1)
+	BIT_ELEMENTS=BIT_TAGS.map(emptyEl),
+	byteToHTML = intToBin(BIT_ELEMENTS, 8),
+	byteToHTML_memo = num => BYTE_MEMO[num] || (BYTE_MEMO[num]=byteToHTML(num)),
+	colIndexToRGB = i => intToBin(['00', config['bright'+(i&8?1:0)]], 3)((i&4)>>1 | (i&2)<<1  | i&1)
 
 function attributeToIPBF(attr) {
     return [
@@ -134,12 +138,12 @@ function buildCSS(c = CLASS) {
 		.${c.screen} * { box-sizing: border-box; }
 		.${c.screen} { font-size: 0; width: calc(var(${PIXEL_SIZE_VARNAME}) * 8 * 32); }
 		.${c.char} { width: calc(var(${PIXEL_SIZE_VARNAME}) * 8); height: calc(var(${PIXEL_SIZE_VARNAME}) * 8); display: inline-block; }
-		.${c.char} ${BIT_ELEMENTS[0]}, .${c.char} ${BIT_ELEMENTS[1]} {
+		.${c.char} ${BIT_TAGS[0]}, .${c.char} ${BIT_TAGS[1]} {
 			height: var(${PIXEL_SIZE_VARNAME});
 			width: var(${PIXEL_SIZE_VARNAME});
 			display: inline-block;
 		}
-		.${c.char} ${BIT_ELEMENTS[1]} { border-left: var(${PIXEL_SIZE_VARNAME}) solid; }
+		.${c.char} ${BIT_TAGS[1]} { border-left: var(${PIXEL_SIZE_VARNAME}) solid; }
 
 		@keyframes flash0 {
 		  0%   {border-left:none;}
@@ -150,8 +154,8 @@ function buildCSS(c = CLASS) {
 		  50%  {border-left:none;}
 		}
 
-		.${c.char}.${c.flash} ${BIT_ELEMENTS[0]} { animation: flash0 0.64s step-end infinite; }
-		.${c.char}.${c.flash} ${BIT_ELEMENTS[1]} { animation: flash1 0.64s step-end infinite; }
+		.${c.char}.${c.flash} ${BIT_TAGS[0]} { animation: flash0 0.64s step-end infinite; }
+		.${c.char}.${c.flash} ${BIT_TAGS[1]} { animation: flash1 0.64s step-end infinite; }
 	`
 	let pCSS = '', iCSS = '', col
 	for (let a=0; a<=15; a++) {
@@ -180,7 +184,7 @@ function poke$(address, values, screen = lastScreen) {
 }
 
 function setBitmapByte(offset, value, screen) {
-	screen._bytes[offset].innerHTML = byteToHTML(value)
+	screen._bytes[offset].innerHTML = byteToHTML_memo(value)
 }
 
 function setAttributeBlock(offset, value, screen, c = CLASS) {
